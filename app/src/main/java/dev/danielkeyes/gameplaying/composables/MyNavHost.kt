@@ -3,17 +3,16 @@ package dev.danielkeyes.gameplaying.composables
 import dev.danielkeyes.gameplaying.GameSelect
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
+import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import dev.danielkeyes.gameplaying.scoring.Scoring
 import dev.danielkeyes.gameplaying.games.dreamwell.DreamwellSetup
 import dev.danielkeyes.gameplaying.games.dreamwell.PlayDreamWell
-import dev.danielkeyes.gameplaying.games.dreamwell.vm.DreamWellViewModel
 import dev.danielkeyes.gameplaying.games.utils.LifeCounter
 import dev.danielkeyes.gameplaying.games.utils.PlayerCountSelect
 import dev.danielkeyes.gameplaying.games.utils.TwoPlayerLifeCounter
+import dev.danielkeyes.gameplaying.scoring.Winner
 
 enum class ROUTE{
     GAMESELECT,
@@ -22,12 +21,14 @@ enum class ROUTE{
     LIFECOUNTER,
     ONEPLAYERLIFECOUNTER,
     TWOPLAYERLIFECOUNTER,
+    SCORING,
+    SCORINGWINNER,
 }
 
 
 @Composable
 fun MyNavHost(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = "gameSelect") {
+    NavHost(navController = navController, startDestination = ROUTE.GAMESELECT.toString()) {
         // Game Select
         composable(ROUTE.GAMESELECT.toString()){
             GameSelect(navController)
@@ -35,23 +36,27 @@ fun MyNavHost(navController: NavHostController) {
         
         // DreamWell
         composable(ROUTE.DREAMWELLSETUP.toString()) {
-            val vm = viewModel<DreamWellViewModel>()
-
             DreamwellSetup(
                 navHost = navController,
-                playerNames = vm.players.observeAsState(listOf()).value,
-                updatePlayerCount = {vm.updatePlayerCount(it)},
-                updatePlayerName = {player, name -> vm.updatePlayerName(player, name)}
             )
         }
 
-        composable(ROUTE.DREAMWELL.toString()) {
-            val vm = viewModel<DreamWellViewModel>()
+        composable(
+            ROUTE.DREAMWELL.toString(),
+            arguments = listOf(
+                navArgument("PlayerCount") {
+                    type = NavType.IntType
+                    defaultValue = 2
+                },
+                navArgument("Players") {
+                    type = NavType.StringArrayType
+                    defaultValue = arrayOf("Player 1", "Player 2", "Player 3", "Player 4")
+                }
+            )
+        ) { entry ->
             PlayDreamWell(
-                playerCount = vm.playerCount.observeAsState(0).value,
-                players = vm.players.observeAsState(listOf()).value,
-                resetTurn = vm.resetTurn(),
-                useAction = vm.useAction(),
+                playerCount = entry.arguments?.getInt("PlayerCount")?: 2,
+                players = entry.arguments?.getStringArray("Players")?: arrayOf<String>()
             )
         }
 
@@ -64,6 +69,38 @@ fun MyNavHost(navController: NavHostController) {
         }
         composable(ROUTE.TWOPLAYERLIFECOUNTER.toString()){
             TwoPlayerLifeCounter()
+        }
+
+        // Scoring
+        composable(ROUTE.SCORING.toString()){
+            Scoring(navHost = navController)
+        }
+        composable(ROUTE.SCORINGWINNER.toString(),
+            arguments = listOf(
+                navArgument("winner") {
+                    type = NavType.IntType
+                    defaultValue = "Winner"
+                },
+                navArgument("winnerScore") {
+                    type = NavType.StringArrayType
+                    defaultValue = 0
+                },
+                navArgument("loser") {
+                    type = NavType.StringArrayType
+                    defaultValue = "Loser"
+                },
+                navArgument("loserScore") {
+                    type = NavType.StringArrayType
+                    defaultValue = 0
+                },
+            )
+        ){ entry ->
+            Winner(
+                winner = entry.arguments?.getString("winner")?: "Winner",
+                winnerScore = entry.arguments?.getInt("winnerScore")?: 0,
+                loser = entry.arguments?.getString("loser")?: "Loser",
+                loserScore = entry.arguments?.getInt("loserScore")?: 0,
+            )
         }
     }
 }

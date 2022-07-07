@@ -29,9 +29,9 @@ fun GameSelect(navHost: NavHostController) {
     val data = listOf(
         GameOption("Dreamwell", ROUTE.DREAMWELLSETUP.toString()),
         GameOption("Life Counter", ROUTE.LIFECOUNTER.toString()),
-        GameOption("Placeholder", ""),
-        GameOption("Placeholder", ""),
-        GameOption("Placeholder", ""),
+        GameOption("Score Card", ROUTE.SCORING.toString()),
+        GameOption("Dice/Coin", ""),
+        GameOption("Countdown", ""),
         GameOption("Placeholder", ""),
         GameOption("Placeholder", ""),
         GameOption("Placeholder", ""),

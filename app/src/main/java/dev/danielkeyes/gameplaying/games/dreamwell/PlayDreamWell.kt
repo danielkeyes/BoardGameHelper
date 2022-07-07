@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun PlayDreamWell(playerCount: Int, players: List<String>, resetTurn: Unit, useAction: Unit) {
+fun PlayDreamWell(playerCount: Int, players: Array<String>) {
     Column(modifier = Modifier.fillMaxSize()) {
         Text("Unimplemented")
         Text("$playerCount")
