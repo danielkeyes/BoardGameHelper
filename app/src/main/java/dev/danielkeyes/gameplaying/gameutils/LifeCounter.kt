@@ -1,4 +1,4 @@
-package dev.danielkeyes.gameplaying.games.utils
+package dev.danielkeyes.gameplaying.gameutils
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
@@ -7,6 +7,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -19,6 +23,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import dev.danielkeyes.gameplaying.ui.theme.GamePlayingTheme
 
+// Add player renaming
 @Composable
 fun PlayerCountSelect(navHost: NavHostController, setPlayerCount: (Int) -> Unit) {
     Column(
@@ -50,14 +55,23 @@ fun PlayerCountSelect(navHost: NavHostController, setPlayerCount: (Int) -> Unit)
     }
 }
 
+// TODO add if health goes to zero or below add color change
 @Composable
 fun LifeCounter(
     lifeTotal: Int = 20,
     name: String = "Player 1",
     modifier: Modifier = Modifier
 ) {
+    var health by rememberSaveable() {
+        mutableStateOf(lifeTotal)
+    }
+
+    var playerName by rememberSaveable() {
+        mutableStateOf(name)
+    }
+
     Column(modifier = modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = "- $name -", fontSize = 36.sp, modifier = Modifier.padding(16.dp))
+        Text(text = "- $playerName -", fontSize = 36.sp, modifier = Modifier.padding(16.dp))
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -66,13 +80,13 @@ fun LifeCounter(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            HealthButton(text = "-") { /* Decrease here */ }
+            HealthButton(text = "-") { health.minus(1)}
             Text(
-                text = lifeTotal.toString(),
+                text = health.toString(),
                 style = MaterialTheme.typography.titleLarge,
                 fontSize = 64.sp
             )
-            HealthButton(text = "+") { /* Decrease here */ }
+            HealthButton(text = "+") { health.plus(1) }
         }
     }
 }
@@ -82,7 +96,7 @@ fun TwoPlayerLifeCounter(
     player1LifeTotal: Int = 20,
     player1Name: String = "Player 1",
     player2LifeTotal: Int = 20,
-    player2Name: String = "Player 1",
+    player2Name: String = "Player 2",
 ) {
     // portrait
     if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT) {

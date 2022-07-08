@@ -1,4 +1,4 @@
-package dev.danielkeyes.gameplaying.scoring
+package dev.danielkeyes.gameplaying.gameutils
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text

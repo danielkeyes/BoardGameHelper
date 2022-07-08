@@ -1,4 +1,4 @@
-package dev.danielkeyes.gameplaying.games.dreamwell
+package dev.danielkeyes.gameplaying.dreamwell
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,6 +23,7 @@ import dev.danielkeyes.gameplaying.composables.ROUTE
 import dev.danielkeyes.gameplaying.composables.rememberMutableStateListOf
 import dev.danielkeyes.gameplaying.ui.theme.GamePlayingTheme
 
+// TODO future integration, doing 2p design for the moment only
 @Composable
 fun DreamwellSetup(
     navHost: NavHostController,
@@ -80,7 +81,9 @@ fun DreamwellSetup(
                     label = {
                         Text(
                             text = "Player $i",
-                            modifier = Modifier.padding(8.dp).background(MaterialTheme.colorScheme.background)
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .background(MaterialTheme.colorScheme.background)
                         )
                     },
                     value = playerNames[i - 1], // TODO handle if playerNames doesn't have i-1
@@ -97,9 +100,9 @@ fun DreamwellSetup(
                 .padding(32.dp),
             onClick = {
                 navHost.navigate(
-                    "${ROUTE.DREAMWELL.toString()}" +
-                    "playerCount=${playerCount.value}" +
-                    "players=$playerNames"
+                    "${ROUTE.DREAMWELL}" +
+                    "/${playerCount.value}" +
+                    "/players=${arrayOf(playerNames)}"
                 )
             }
         ) {

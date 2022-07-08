@@ -6,23 +6,25 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import dev.danielkeyes.gameplaying.scoring.Scoring
-import dev.danielkeyes.gameplaying.games.dreamwell.DreamwellSetup
-import dev.danielkeyes.gameplaying.games.dreamwell.PlayDreamWell
-import dev.danielkeyes.gameplaying.games.utils.LifeCounter
-import dev.danielkeyes.gameplaying.games.utils.PlayerCountSelect
-import dev.danielkeyes.gameplaying.games.utils.TwoPlayerLifeCounter
-import dev.danielkeyes.gameplaying.scoring.Winner
+import dev.danielkeyes.gameplaying.dreamwell.Dreamwell
+import dev.danielkeyes.gameplaying.gameutils.Scoring
+import dev.danielkeyes.gameplaying.gameutils.DiceCoin
+import dev.danielkeyes.gameplaying.gameutils.LifeCounter
+import dev.danielkeyes.gameplaying.gameutils.PlayerCountSelect
+import dev.danielkeyes.gameplaying.gameutils.TwoPlayerLifeCounter
+import dev.danielkeyes.gameplaying.gameutils.Winner
 
 enum class ROUTE{
     GAMESELECT,
     DREAMWELL,
-    DREAMWELLSETUP,
+//    DREAMWELLSETUP,
     LIFECOUNTER,
     ONEPLAYERLIFECOUNTER,
     TWOPLAYERLIFECOUNTER,
     SCORING,
     SCORINGWINNER,
+    DICECOIN,
+    UNIMPLEMENTED,
 }
 
 
@@ -33,32 +35,50 @@ fun MyNavHost(navController: NavHostController) {
         composable(ROUTE.GAMESELECT.toString()){
             GameSelect(navController)
         }
-        
+
         // DreamWell
-        composable(ROUTE.DREAMWELLSETUP.toString()) {
-            DreamwellSetup(
-                navHost = navController,
-            )
+        composable(ROUTE.DREAMWELL.toString()) {
+            Dreamwell()
         }
 
-        composable(
-            ROUTE.DREAMWELL.toString(),
-            arguments = listOf(
-                navArgument("PlayerCount") {
-                    type = NavType.IntType
-                    defaultValue = 2
-                },
-                navArgument("Players") {
-                    type = NavType.StringArrayType
-                    defaultValue = arrayOf("Player 1", "Player 2", "Player 3", "Player 4")
-                }
-            )
-        ) { entry ->
-            PlayDreamWell(
-                playerCount = entry.arguments?.getInt("PlayerCount")?: 2,
-                players = entry.arguments?.getStringArray("Players")?: arrayOf<String>()
-            )
-        }
+//        // DreamWell
+//        composable(ROUTE.DREAMWELLSETUP.toString()) {
+//            DreamwellSetup(
+//                navHost = navController,
+//            )
+//        }
+
+//        composable(
+//            "${Screens.Start.route}/{tId}",
+//            arguments = listOf(navArgument("tId") {
+//                type = NavType.StringType
+//            })
+//        ) {
+//
+//            StartScreen(viewModel, navController, it.arguments?.getString("tId") ?: "")
+//        }
+        //createExercise/{exerciseId}/{workoutId}?setNumber={setNumber}&repNumber={repNumber}
+
+        // playerCount required and players optional
+//        composable(
+//            "${ROUTE.DREAMWELL}/{playerCount}/players={players}",
+////            "${ROUTE.DREAMWELL}/{playerCount}",
+//            arguments = listOf(
+//                navArgument("playerCount") {
+//                    type = NavType.IntType
+//                    defaultValue = 2
+//                },
+//                navArgument("players") {
+//                    type = NavType.StringArrayType
+//                    defaultValue = arrayOf("Player 1", "Player 2", "Player 3", "Player 4")
+//                }
+//            )
+//        ) { entry ->
+//            PlayDreamWell(
+//                playerCount = entry.arguments?.getInt("playerCount")?: 2,
+//                players = entry.arguments?.getStringArray("players")?: arrayOf<String>()
+//            )
+//        }
 
         // Life Counter
         composable(ROUTE.LIFECOUNTER.toString()){
@@ -101,6 +121,14 @@ fun MyNavHost(navController: NavHostController) {
                 loser = entry.arguments?.getString("loser")?: "Loser",
                 loserScore = entry.arguments?.getInt("loserScore")?: 0,
             )
+        }
+
+        composable(ROUTE.DICECOIN.toString()){
+            DiceCoin()
+        }
+
+        composable(ROUTE.UNIMPLEMENTED.toString()){
+            Unimplemented()
         }
     }
 }

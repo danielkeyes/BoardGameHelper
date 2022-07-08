@@ -1,8 +1,10 @@
-package dev.danielkeyes.gameplaying.scoring
+package dev.danielkeyes.gameplaying.gameutils
 
+import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
@@ -15,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -39,7 +42,14 @@ fun Scoring(navHost: NavHostController) {
         val scoringValue = listOf<Int>(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
         LazyVerticalGrid(
             modifier = Modifier.fillMaxWidth(),
-            cells = GridCells.Fixed(4),
+            cells =
+            if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT)
+            {
+                GridCells.Fixed(4)
+            }
+            else  {
+                GridCells.Fixed(10)
+            },
             contentPadding = PaddingValues(8.dp)
         ) {
             items(items = scoringValue) {
@@ -156,6 +166,7 @@ fun SinglePlayerScoring(
     Column(
         modifier = modifier
             .fillMaxSize()
+            .clickable { onClick() }
             .border(
                 width = 4.dp, color =
                 if (isActive) {
@@ -177,18 +188,24 @@ fun SinglePlayerScoring(
                 .padding(vertical = 16.dp)
         )
 
-        val stringBuilder = StringBuilder()
-        scoreHistory.forEach {
-            stringBuilder.append("+${it.toString()} ")
-        }
-        Text(text = stringBuilder.toString(), modifier = Modifier.padding(16.dp))
-
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .weight(1f), contentAlignment = Alignment.Center
+                .weight(1f),
+            contentAlignment = Alignment.Center
         ) {
+            Column(modifier = Modifier.fillMaxSize()) {
+                val stringBuilder = StringBuilder()
+                scoreHistory.forEach {
+                    stringBuilder.append("+${it.toString()} ")
+                }
+                Text(text = stringBuilder.toString(), modifier = Modifier.padding(16.dp))
+            }
+
             Text(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .background(MaterialTheme.colorScheme.surface),
                 text = scoreHistory.sum().toString(),
                 fontSize = 48.sp,
                 textAlign = TextAlign.Center

@@ -27,14 +27,14 @@ fun GameSelect(navHost: NavHostController) {
 
     // TODO would like to update text with graphic placeholders
     val data = listOf(
-        GameOption("Dreamwell", ROUTE.DREAMWELLSETUP.toString()),
+        GameOption("Dreamwell", ROUTE.DREAMWELL.toString()),
         GameOption("Life Counter", ROUTE.LIFECOUNTER.toString()),
         GameOption("Score Card", ROUTE.SCORING.toString()),
-        GameOption("Dice/Coin", ""),
-        GameOption("Countdown", ""),
-        GameOption("Placeholder", ""),
-        GameOption("Placeholder", ""),
-        GameOption("Placeholder", ""),
+        GameOption("Dice/Coin", ROUTE.DICECOIN.toString()),
+        GameOption("Countdown", ROUTE.UNIMPLEMENTED.toString()),
+        GameOption("Placeholder", ROUTE.UNIMPLEMENTED.toString()),
+        GameOption("Placeholder", ROUTE.UNIMPLEMENTED.toString()),
+        GameOption("Placeholder", ROUTE.UNIMPLEMENTED.toString()),
     )
 
     LazyVerticalGrid(
