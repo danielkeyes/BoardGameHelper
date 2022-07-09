@@ -21,36 +21,41 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import dev.danielkeyes.gameplaying.composables.MyScaffold
+import dev.danielkeyes.gameplaying.composables.ROUTE
 import dev.danielkeyes.gameplaying.ui.theme.GamePlayingTheme
 
-// Add player renaming
+// TODO Add player renaming
+// add rotation button
 @Composable
-fun PlayerCountSelect(navHost: NavHostController, setPlayerCount: (Int) -> Unit) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = "Players",
-            style = MaterialTheme.typography.titleLarge,
-            fontSize = 64.sp
-        )
-        Button(
-            modifier = Modifier.padding(16.dp),
-            onClick = {
-                setPlayerCount(1)
-                navHost.navigate("onePlayerLifeCounter")
-            }) {
-            Text(text = "1 Player")
-        }
-        Button(
-            modifier = Modifier.padding(16.dp),
-            onClick = {
-                setPlayerCount(2)
-                navHost.navigate("twoPlayerLifeCounter")
-            }) {
-            Text(text = "2 Player")
+fun PlayerCountSelect(navHost: NavHostController) {
+    MyScaffold(title = "Life Counter") {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = "Players",
+                style = MaterialTheme.typography.titleLarge,
+                fontSize = 64.sp,
+            )
+            Button(
+                modifier = Modifier.padding(16.dp),
+                onClick = {
+                    navHost.navigate(ROUTE.ONEPLAYERLIFECOUNTER.toString())
+                }) {
+                Text(text = "1 Player")
+            }
+            Button(
+                modifier = Modifier.padding(16.dp),
+                onClick = {
+                    navHost.navigate(ROUTE.TWOPLAYERLIFECOUNTER.toString())
+                }) {
+                Text(text = "2 Player")
+            }
         }
     }
 }
@@ -59,7 +64,7 @@ fun PlayerCountSelect(navHost: NavHostController, setPlayerCount: (Int) -> Unit)
 @Composable
 fun LifeCounter(
     lifeTotal: Int = 20,
-    name: String = "Player 1",
+    name: String = "",
     modifier: Modifier = Modifier
 ) {
     var health by rememberSaveable() {
@@ -71,7 +76,9 @@ fun LifeCounter(
     }
 
     Column(modifier = modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = "- $playerName -", fontSize = 36.sp, modifier = Modifier.padding(16.dp))
+        if(playerName.isNotEmpty()){
+            Text(text = "- $playerName -", fontSize = 36.sp, modifier = Modifier.padding(16.dp))
+        }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -80,14 +87,25 @@ fun LifeCounter(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            HealthButton(text = "-") { health.minus(1)}
+            HealthButton(text = "-") {
+                health = health.minus(1)
+            }
             Text(
                 text = health.toString(),
                 style = MaterialTheme.typography.titleLarge,
                 fontSize = 64.sp
             )
-            HealthButton(text = "+") { health.plus(1) }
+            HealthButton(text = "+") {
+                health = health.plus(1)
+            }
         }
+    }
+}
+
+@Composable
+fun SinglePlayerLifeCounter() {
+    MyScaffold(title = "Life Counter") {
+        LifeCounter(lifeTotal = 20)
     }
 }
 
@@ -98,71 +116,59 @@ fun TwoPlayerLifeCounter(
     player2LifeTotal: Int = 20,
     player2Name: String = "Player 2",
 ) {
-    // portrait
-    if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            LifeCounter(
-                lifeTotal = player2LifeTotal,
-                name = player1Name,
-                modifier = Modifier
-                    .weight(1f)
-                    .rotate(180f)
-            )
-            Spacer(modifier = Modifier
-                .fillMaxWidth()
-                .height(8.dp)
-                .background(MaterialTheme.colorScheme.onBackground))
-            LifeCounter(
-                lifeTotal = player1LifeTotal,
-                name = player2Name,
-                modifier = Modifier.weight(1f)
-            )
-        }
-    } else { // landscape
-        Row(modifier = Modifier.fillMaxSize()) {
-            LifeCounter(
-                lifeTotal = player1LifeTotal,
-                name = player1Name,
-                modifier = Modifier
-                    .weight(1f)
-            )
-            Spacer(modifier = Modifier
-                .fillMaxHeight()
-                .width(8.dp)
-                .background(MaterialTheme.colorScheme.onBackground))
-            LifeCounter(
-                lifeTotal = player2LifeTotal,
-                name = player2Name,
-                modifier = Modifier.weight(1f)
-            )
+    MyScaffold(title = "Life Counter") {
+        // portrait
+        if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            Column(modifier = Modifier.fillMaxSize()) {
+                LifeCounter(
+                    lifeTotal = player2LifeTotal,
+                    name = player2Name,
+                    modifier = Modifier
+                        .weight(1f)
+                        .rotate(180f)
+                )
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(8.dp)
+                        .background(MaterialTheme.colorScheme.onBackground)
+                )
+                LifeCounter(
+                    lifeTotal = player1LifeTotal,
+                    name = player1Name,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+        } else { // landscape
+            Row(modifier = Modifier.fillMaxSize()) {
+                LifeCounter(
+                    lifeTotal = player1LifeTotal,
+                    name = player1Name,
+                    modifier = Modifier
+                        .weight(1f)
+                )
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .width(8.dp)
+                        .background(MaterialTheme.colorScheme.onBackground)
+                )
+                LifeCounter(
+                    lifeTotal = player2LifeTotal,
+                    name = player2Name,
+                    modifier = Modifier.weight(1f)
+                )
+            }
         }
     }
-
-//    Column() {
-//        LifeCounter(
-//            lifeTotal = player2LifeTotal,
-//            name = player1Name,
-//            modifier = Modifier
-//                .weight(1f)
-//                .rotate(180f)
-//        )
-//        Spacer(modifier = Modifier
-//            .fillMaxWidth()
-//            .height(8.dp)
-//            .background(MaterialTheme.colorScheme.onBackground))
-//        LifeCounter(
-//            lifeTotal = player1LifeTotal,
-//            name = player2Name,
-//            modifier = Modifier.weight(1f)
-//        )
-//    }
 }
 
 @Composable
 fun HealthButton(text: String, updateHealth: () -> Unit) {
     Button(
         modifier = Modifier.padding(8.dp),
-        onClick = { updateHealth }) {
+        onClick = { updateHealth() }
+    ) {
         Text(
             text = text,
             fontSize = 18.sp
@@ -176,7 +182,7 @@ fun PreviewSetPlayerCount() {
     GamePlayingTheme {
         PlayerCountSelect(
             rememberNavController()
-        ) {}
+        )
     }
 }
 

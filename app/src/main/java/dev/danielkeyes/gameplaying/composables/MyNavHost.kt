@@ -7,12 +7,7 @@ import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import dev.danielkeyes.gameplaying.dreamwell.Dreamwell
-import dev.danielkeyes.gameplaying.gameutils.Scoring
-import dev.danielkeyes.gameplaying.gameutils.DiceCoin
-import dev.danielkeyes.gameplaying.gameutils.LifeCounter
-import dev.danielkeyes.gameplaying.gameutils.PlayerCountSelect
-import dev.danielkeyes.gameplaying.gameutils.TwoPlayerLifeCounter
-import dev.danielkeyes.gameplaying.gameutils.Winner
+import dev.danielkeyes.gameplaying.gameutils.*
 
 enum class ROUTE{
     GAMESELECT,
@@ -82,10 +77,10 @@ fun MyNavHost(navController: NavHostController) {
 
         // Life Counter
         composable(ROUTE.LIFECOUNTER.toString()){
-            PlayerCountSelect(navHost = navController) {}
+            PlayerCountSelect(navHost = navController)
         }
         composable(ROUTE.ONEPLAYERLIFECOUNTER.toString()){
-            LifeCounter()
+            SinglePlayerLifeCounter()
         }
         composable(ROUTE.TWOPLAYERLIFECOUNTER.toString()){
             TwoPlayerLifeCounter()

@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import dev.danielkeyes.gameplaying.composables.MyScaffold
 import dev.danielkeyes.gameplaying.composables.ROUTE
 import dev.danielkeyes.gameplaying.composables.rememberMutableStateListOf
 import dev.danielkeyes.gameplaying.ui.theme.GamePlayingTheme
@@ -37,102 +38,102 @@ fun Scoring(navHost: NavHostController) {
     val player1Score = rememberMutableStateListOf<Int>()
     val player2Score = rememberMutableStateListOf<Int>()
 
-    Column() {
-        // Scoring buttons
-        val scoringValue = listOf<Int>(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-        LazyVerticalGrid(
-            modifier = Modifier.fillMaxWidth(),
-            cells =
-            if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT)
-            {
-                GridCells.Fixed(4)
-            }
-            else  {
-                GridCells.Fixed(10)
-            },
-            contentPadding = PaddingValues(8.dp)
-        ) {
-            items(items = scoringValue) {
-                Button(
-                    onClick = {
-                        if (activePlayer.value == 1) {
-                            player1Score.add(it)
-                        } else if (activePlayer.value == 2) {
-                            player2Score.add(it)
-                        }
-                    }, modifier = Modifier.padding(4.dp)
-                ) {
-                    Text(text = "+$it")
+    MyScaffold(title = "Scoring") {
+        Column() {
+            // Scoring buttons
+            val scoringValue = listOf<Int>(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+            LazyVerticalGrid(
+                modifier = Modifier.fillMaxWidth(),
+                cells =
+                if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    GridCells.Fixed(4)
+                } else {
+                    GridCells.Fixed(10)
+                },
+                contentPadding = PaddingValues(8.dp)
+            ) {
+                items(items = scoringValue) {
+                    Button(
+                        onClick = {
+                            if (activePlayer.value == 1) {
+                                player1Score.add(it)
+                            } else if (activePlayer.value == 2) {
+                                player2Score.add(it)
+                            }
+                        }, modifier = Modifier.padding(4.dp)
+                    ) {
+                        Text(text = "+$it")
+                    }
                 }
             }
-        }
 
-        // Player Scores
-        Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.weight(1f)) {
-            SinglePlayerScoring(
-                name = "Player 1",
-                scoreHistory = player1Score.toList(),
-                isActive = activePlayer.value == 1,
-                modifier = Modifier.weight(1f),
-                onClick = { activePlayer.value = 1 }
-            )
-            Spacer(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .width(2.dp)
-                    .background(androidx.compose.material.MaterialTheme.colors.onBackground)
-            )
-            SinglePlayerScoring(
-                name = "Player 2",
-                scoreHistory = player2Score.toList(),
-                isActive = activePlayer.value == 2,
-                modifier = Modifier.weight(1f),
-                onClick = { activePlayer.value = 2 }
-            )
-        }
-
-        // Reset and Done Button
-        Row {
-
-            Button(
-                onClick = {
-                    player1Score.clear()
-                    player2Score.clear()
-                },
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
-                    .weight(1f)
-            ) {
-                Text(text = "Reset", fontSize = 16.sp)
+            // Player Scores
+            Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.weight(1f)) {
+                SinglePlayerScoring(
+                    name = "Player 1",
+                    scoreHistory = player1Score.toList(),
+                    isActive = activePlayer.value == 1,
+                    modifier = Modifier.weight(1f),
+                    onClick = { activePlayer.value = 1 }
+                )
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .width(2.dp)
+                        .background(androidx.compose.material.MaterialTheme.colors.onBackground)
+                )
+                SinglePlayerScoring(
+                    name = "Player 2",
+                    scoreHistory = player2Score.toList(),
+                    isActive = activePlayer.value == 2,
+                    modifier = Modifier.weight(1f),
+                    onClick = { activePlayer.value = 2 }
+                )
             }
 
-            Button(
-                onClick = {
-                    if (player1Score.sum() > player2Score.sum()) {
-                        navigateWinnerScoring(
-                            navHost,
-                            "Player 1",
-                            player1Score.sum(),
-                            "Player 2",
-                            player2Score.sum()
-                        )
-                    } else {
-                        navigateWinnerScoring(
-                            navHost,
-                            "Player 2",
-                            player2Score.sum(),
-                            "Player 1",
-                            player1Score.sum()
-                        )
-                    }
-                },
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
-                    .weight(1f)
-            ) {
-                Text(text = "Done", fontSize = 16.sp)
+            // Reset and Done Button
+            Row {
+
+                Button(
+                    onClick = {
+                        player1Score.clear()
+                        player2Score.clear()
+                    },
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth()
+                        .weight(1f)
+                ) {
+                    Text(text = "Reset", fontSize = 16.sp)
+                }
+
+                Button(
+                    onClick = {
+                        if (player1Score.sum() > player2Score.sum()) {
+                            navigateWinnerScoring(
+                                navHost,
+                                "Player 1",
+                                player1Score.sum(),
+                                "Player 2",
+                                player2Score.sum()
+                            )
+                        } else {
+                            navigateWinnerScoring(
+                                navHost,
+                                "Player 2",
+                                player2Score.sum(),
+                                "Player 1",
+                                player1Score.sum()
+                            )
+                        }
+                    },
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth()
+                        .weight(1f)
+                ) {
+                    Text(text = "Done", fontSize = 16.sp)
+                }
             }
         }
     }

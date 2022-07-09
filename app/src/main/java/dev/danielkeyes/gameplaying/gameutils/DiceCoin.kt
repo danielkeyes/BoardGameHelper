@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.danielkeyes.gameplaying.RandomizerUseCase
+import dev.danielkeyes.gameplaying.composables.MyScaffold
 import dev.danielkeyes.gameplaying.ui.theme.GamePlayingTheme
 
 // TODO - add multiple dice
@@ -31,64 +32,68 @@ fun DiceCoin() {
     // All possible dice sides
     val diceOptions = listOf(100, 20, 12, 10, 8, 6, 4)
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(8.dp)
-    ) {
+    MyScaffold(title = "Dice/Coin") {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp)
+        ) {
 
-        var result by rememberSaveable { mutableStateOf("Choose an option") }
+            var result by rememberSaveable { mutableStateOf("Choose an option") }
 
-        // Dice roll options
-        Text(text = "Roll a Die/Dice")
-        // TODO rework reusable lazyVertical Grid for reuse
+            // Dice roll options
+            Text(text = "Roll a Die")
+            // TODO rework reusable lazyVertical Grid for reuse
 //        LazyVerticalGridOrientatedButtons(
 //        items = diceOptions,
 //        onclick = { it -> /* What happens when we roll */}
 //        )
-        LazyVerticalGrid(
-            modifier = Modifier.fillMaxWidth(),
-            cells =
-            if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT) {
-                GridCells.Fixed(4)
-            } else {
-                GridCells.Fixed(10)
-            },
-            contentPadding = PaddingValues(8.dp)
-        ) {
-            items(items = diceOptions) {
-                Button(
-                    modifier = Modifier.padding(8.dp),
-                    onClick = {
-                        result = RandomizerUseCase.roll(it).toString()
+            LazyVerticalGrid(
+                modifier = Modifier.fillMaxWidth(),
+                cells =
+                if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    GridCells.Fixed(4)
+                } else {
+                    GridCells.Fixed(10)
+                },
+                contentPadding = PaddingValues(8.dp)
+            ) {
+                items(items = diceOptions) {
+                    Button(
+                        modifier = Modifier.padding(8.dp),
+                        onClick = {
+                            result = RandomizerUseCase.roll(it).toString()
+                        }
+                    ) {
+                        Text(text = "d$it")
                     }
-                ) {
-                    Text(text = "d$it")
                 }
             }
-        }
 
-        // Coin flip options
-        Text(text = "Flip a coin")
-        Button(
-            modifier = Modifier.padding(8.dp),
-            onClick = {
-                result = RandomizerUseCase.flipACoin().toString()
+            // Coin flip options
+            Text(text = "Flip a coin")
+            Button(
+                modifier = Modifier.padding(8.dp),
+                onClick = {
+                    result = RandomizerUseCase.flipACoin().toString()
+                }
+            ) {
+                Text(text = "Flip!")
             }
-        ) {
-            Text(text = "Flip!")
-        }
 
-        // Result
-        Box(
-            modifier = Modifier.fillMaxSize().weight(1f),
-            contentAlignment = Alignment.Center,
-        ) {
-            Text(
-                text = "$result",
-                fontSize = 48.sp,
-                style = MaterialTheme.typography.titleLarge
-            )
+            // Result
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(1f),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    text = "$result",
+                    fontSize = 48.sp,
+                    style = MaterialTheme.typography.titleLarge
+                )
+            }
         }
     }
 }

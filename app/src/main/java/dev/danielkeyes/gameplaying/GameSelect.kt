@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import dev.danielkeyes.gameplaying.composables.MyScaffold
 import dev.danielkeyes.gameplaying.composables.ROUTE
 import dev.danielkeyes.gameplaying.ui.theme.GamePlayingTheme
 
@@ -37,36 +38,30 @@ fun GameSelect(navHost: NavHostController) {
         GameOption("Placeholder", ROUTE.UNIMPLEMENTED.toString()),
     )
 
-    LazyVerticalGrid(
-        cells = GridCells.Fixed(2),
-        contentPadding = PaddingValues(8.dp)
-    ) {
-        items(data) { item ->
-            Card(
-                modifier = Modifier.padding(4.dp).clickable{
-                    navHost.navigate(item.route)
-                },
+    MyScaffold(title = "Game/Util Select") {
+        LazyVerticalGrid(
+            cells = GridCells.Fixed(2),
+            contentPadding = PaddingValues(8.dp)
+        ) {
+            items(data) { item ->
+                Card(
+                    modifier = Modifier
+                        .padding(4.dp)
+                        .clickable {
+                            navHost.navigate(item.route)
+                        },
 //                backgroundColor = Color( )
-            ) {
-                Text(
-                    text = item.name,
-                    fontSize = 16.sp,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(24.dp)
-                )
+                ) {
+                    Text(
+                        text = item.name,
+                        fontSize = 16.sp,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(24.dp)
+                    )
+                }
             }
         }
     }
-
-//    Row(modifier = Modifier.fillMaxSize()) {
-//        Image(
-//            modifier = Modifier.clickable {
-//                navHost.navigate("dreamWellSetup")
-//            },
-//            painter = painterResource(id = R.drawable.dreamwellboardgame),
-//            contentDescription = "Dream Well"
-//        )
-//    }
 }
 
 data class GameOption(

@@ -13,6 +13,8 @@ fun Winner(winner: String, winnerScore: Int, loser: String, loserScore: Int) {
         Text(text = loser)
         Text(text = loserScore.toString())
     }
+    // TODO
+    // analytics
 }
 
 @Preview(showBackground = true)
