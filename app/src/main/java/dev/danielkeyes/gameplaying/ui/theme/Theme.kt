@@ -5,9 +5,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
-import com.example.compose.*
 import com.example.ui.theme.AppTypography
-
 
 private val LightColors = lightColorScheme(
     primary = md_theme_light_primary,

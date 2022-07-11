@@ -69,7 +69,7 @@ fun MyScaffold(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
-                    .background(MaterialTheme.colorScheme.primary)
+                    .background(MaterialTheme.colorScheme.primaryContainer)
             ) {
                 Text(
                     text = title,
@@ -77,7 +77,7 @@ fun MyScaffold(
                         .fillMaxWidth()
                         .padding(8.dp),
                     style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onPrimary
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             }
         }

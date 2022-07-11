@@ -1,6 +1,7 @@
 package dev.danielkeyes.gameplaying.gameutils
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -109,7 +110,7 @@ fun Scoring(navHost: NavHostController) {
 
                 Button(
                     onClick = {
-                        if (player1Score.sum() > player2Score.sum()) {
+                        if (player1Score.sum() > player2Score.sum()) { // player 1 higher score
                             navigateWinnerScoring(
                                 navHost,
                                 "Player 1",
@@ -117,13 +118,18 @@ fun Scoring(navHost: NavHostController) {
                                 "Player 2",
                                 player2Score.sum()
                             )
-                        } else {
+                        } else if (player1Score.sum() < player2Score.sum()) { // player 2 higher score
                             navigateWinnerScoring(
                                 navHost,
                                 "Player 2",
                                 player2Score.sum(),
                                 "Player 1",
                                 player1Score.sum()
+                            )
+                        } else {
+                            navigateWinnerScoring(
+                                navHost,
+                                "You Tied",
                             )
                         }
                     },
@@ -142,17 +148,22 @@ fun Scoring(navHost: NavHostController) {
 private fun navigateWinnerScoring(
     navHost: NavHostController,
     winner: String,
-    winnerScore: Int,
-    loser: String,
-    loserScore: Int
+    winnerScore: Int? = null,
+    loser: String? = null,
+    loserScore: Int? = null,
 ) {
-    navHost.navigate(
-        "${ROUTE.SCORINGWINNER.toString()}" +
-                "winner=${winner}" +
-                "winnerScore=${winnerScore}" +
-                "loser=${loser}" +
-                "loserScore=${loserScore}"
-    )
+    val routeSB: StringBuilder = StringBuilder()
+    routeSB.append(ROUTE.SCORINGWINNER.toString())
+    routeSB.append("?winner=${winner}")
+
+    // TODO passing null does not work
+    routeSB.append("&winnerScore=${winnerScore}")
+    routeSB.append("&loser=${loser}")
+    routeSB.append("&loserScore=${loserScore}")
+
+    Log.e("dkeyes", "route: ${routeSB.toString()}")
+
+    navHost.navigate(route = routeSB.toString())
 }
 
 

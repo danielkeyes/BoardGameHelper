@@ -1,6 +1,7 @@
 package dev.danielkeyes.gameplaying.gameutils
 
 import android.content.res.Configuration
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
@@ -187,6 +188,7 @@ fun PreviewSetPlayerCount() {
 }
 
 @Preview(showBackground = true)
+@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
 @Composable
 fun PreviewLifeCounter() {
     GamePlayingTheme {

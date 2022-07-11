@@ -1,5 +1,6 @@
 package dev.danielkeyes.gameplaying.composables
 
+import android.util.Log
 import dev.danielkeyes.gameplaying.GameSelect
 
 import androidx.compose.runtime.Composable
@@ -90,31 +91,32 @@ fun MyNavHost(navController: NavHostController) {
         composable(ROUTE.SCORING.toString()){
             Scoring(navHost = navController)
         }
-        composable(ROUTE.SCORINGWINNER.toString(),
+        composable(
+            "${ROUTE.SCORINGWINNER}" +
+                    "?winner={winner}" +
+                    "&winnerScore={winnerScore}" +
+                    "&loser={loser}" +
+                    "&loserScore={loserScore}",
             arguments = listOf(
                 navArgument("winner") {
-                    type = NavType.IntType
-                    defaultValue = "Winner"
+                    type = NavType.StringType
                 },
                 navArgument("winnerScore") {
-                    type = NavType.StringArrayType
-                    defaultValue = 0
+                    type = NavType.IntType
                 },
                 navArgument("loser") {
-                    type = NavType.StringArrayType
-                    defaultValue = "Loser"
+                    type = NavType.StringType
                 },
                 navArgument("loserScore") {
-                    type = NavType.StringArrayType
-                    defaultValue = 0
+                    type = NavType.IntType
                 },
             )
         ){ entry ->
             Winner(
                 winner = entry.arguments?.getString("winner")?: "Winner",
-                winnerScore = entry.arguments?.getInt("winnerScore")?: 0,
-                loser = entry.arguments?.getString("loser")?: "Loser",
-                loserScore = entry.arguments?.getInt("loserScore")?: 0,
+                winnerScore = entry.arguments?.getInt("winnerScore"),
+                loser = entry.arguments?.getString("loser"),
+                loserScore = entry.arguments?.getInt("loserScore"),
             )
         }
 
