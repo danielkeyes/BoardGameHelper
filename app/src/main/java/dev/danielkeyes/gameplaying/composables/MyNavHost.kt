@@ -102,21 +102,30 @@ fun MyNavHost(navController: NavHostController) {
                     type = NavType.StringType
                 },
                 navArgument("winnerScore") {
-                    type = NavType.IntType
+                    nullable = true
+                    type = NavType.StringType
                 },
                 navArgument("loser") {
+                    nullable = true
                     type = NavType.StringType
                 },
                 navArgument("loserScore") {
-                    type = NavType.IntType
+                    nullable = true
+                    type = NavType.StringType
                 },
             )
         ){ entry ->
+
+            val winner = entry.arguments?.getString("winner")?: "Winner"
+            val winnerScore = entry.arguments?.getString("winnerScore")
+            val loser = entry.arguments?.getString("loser")
+            val loserScore = entry.arguments?.getString("loserScore")
+
             Winner(
-                winner = entry.arguments?.getString("winner")?: "Winner",
-                winnerScore = entry.arguments?.getInt("winnerScore"),
-                loser = entry.arguments?.getString("loser"),
-                loserScore = entry.arguments?.getInt("loserScore"),
+                winner = winner,
+                winnerScore = winnerScore?.toInt(),
+                loser = loser,
+                loserScore = loserScore?.toInt(),
             )
         }
 

@@ -30,8 +30,6 @@ import dev.danielkeyes.gameplaying.composables.ROUTE
 import dev.danielkeyes.gameplaying.composables.rememberMutableStateListOf
 import dev.danielkeyes.gameplaying.ui.theme.GamePlayingTheme
 
-// TODO player name clickable
-
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Scoring(navHost: NavHostController) {
@@ -95,6 +93,8 @@ fun Scoring(navHost: NavHostController) {
             // Reset and Done Button
             Row {
 
+                // TODO add undo button for last scored item?
+
                 Button(
                     onClick = {
                         player1Score.clear()
@@ -156,12 +156,9 @@ private fun navigateWinnerScoring(
     routeSB.append(ROUTE.SCORINGWINNER.toString())
     routeSB.append("?winner=${winner}")
 
-    // TODO passing null does not work
-    routeSB.append("&winnerScore=${winnerScore}")
-    routeSB.append("&loser=${loser}")
-    routeSB.append("&loserScore=${loserScore}")
-
-    Log.e("dkeyes", "route: ${routeSB.toString()}")
+    winnerScore?.let { routeSB.append("&winnerScore=${it}")}
+    loser?.let {routeSB.append("&loser=${it}")}
+    loserScore?.let {  routeSB.append("&loserScore=${it}") }
 
     navHost.navigate(route = routeSB.toString())
 }

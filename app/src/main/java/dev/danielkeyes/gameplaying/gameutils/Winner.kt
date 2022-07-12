@@ -15,7 +15,12 @@ import androidx.compose.ui.unit.sp
 import dev.danielkeyes.gameplaying.ui.theme.GamePlayingTheme
 
 @Composable
-fun Winner(winner: String, winnerScore: Int? = null, loser: String? = null, loserScore: Int? = null) {
+fun Winner(
+    winner: String,
+    winnerScore: Int? = null,
+    loser: String? = null,
+    loserScore: Int? = null
+) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -47,15 +52,30 @@ fun Winner(winner: String, winnerScore: Int? = null, loser: String? = null, lose
                     )
                 )
                 Text(text = "Final score: $winnerScore to $loserScore")
-                Text(text = "$winner won by $ptDifference pts (${percentDiff(ptDifference, winnerScore)})")
-                Text(text = "$loser lost by -$ptDifference pts (${percentDiff(-ptDifference, loserScore)})")
+                Text(
+                    text = "$winner won by $ptDifference pts ${percentDiff(ptDifference, winnerScore)}"
+                )
+                Text(
+                    text = "$loser lost by -$ptDifference pts ${percentDiff(ptDifference, loserScore)}"
+                )
             }
         }
     }
 }
 
-private fun percentDiff(ptDifference: Int, score: Int): String{
-    return "${(ptDifference.toFloat()/score.toFloat()*100).toInt()}%"
+private fun percentDiff(
+    ptDifference: Int,
+    score: Int,
+    prefix: Char? = '(',
+    postfix: Char? = ')'
+): String {
+    return if (ptDifference != 0 && score != 0 && ptDifference != score) {
+        "$prefix" +
+        "${(ptDifference.toFloat() / score.toFloat() * 100).toInt()}%" +
+        "$postfix"
+    } else {
+        ""
+    }
 }
 
 @Preview(showBackground = true)
